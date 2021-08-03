@@ -86,7 +86,7 @@ export default class ToggleSwitch extends React.Component {
     circleColor: "white",
   };
 
-  offsetX = new Animated.Value(0);
+  offsetX = new Animated.Value(this.props.isRTL ? -1 : 0);
   dimensions = ToggleSwitch.calculateDimensions(this.props.size);
 
   createToggleSwitchStyle = () => [
@@ -141,10 +141,10 @@ export default class ToggleSwitch extends React.Component {
     } = this.props;
 
     let toValue;
-    if ((!I18nManager.isRTL || !isRTL) && isOn) {
+    if (!isRTL && isOn) {
       toValue = this.dimensions.width - this.dimensions.translateX;
-    } else if ((I18nManager.isRTL || isRTL) && isOn) {
-      toValue = -this.dimensions.width + this.dimensions.translateX;
+    } else if (isRTL && !isOn) {
+      toValue = this.dimensions.width - this.dimensions.translateX;
     } else {
       toValue = -1;
     }
