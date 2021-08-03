@@ -53,7 +53,6 @@ export default class ToggleSwitch extends React.Component {
   static propTypes = {
     isOn: PropTypes.bool.isRequired,
     label: PropTypes.string,
-    labelPosition: PropTypes.string,
     onColor: PropTypes.string,
     offColor: PropTypes.string,
     size: PropTypes.string,
@@ -76,7 +75,6 @@ export default class ToggleSwitch extends React.Component {
     offColor: "#ecf0f1",
     size: "medium",
     labelStyle: {},
-    labelPosition: 'left',
     thumbOnStyle: {},
     thumbOffStyle: {},
     trackOnStyle: {},
@@ -136,15 +134,16 @@ export default class ToggleSwitch extends React.Component {
       onToggle,
       disabled,
       labelStyle,
-      labelPosition,
+      containerStyle,
       label,
       icon,
+      isRTL = false
     } = this.props;
 
     let toValue;
-    if (!I18nManager.isRTL && isOn) {
+    if ((!I18nManager.isRTL || !isRTL) && isOn) {
       toValue = this.dimensions.width - this.dimensions.translateX;
-    } else if (I18nManager.isRTL && isOn) {
+    } else if ((I18nManager.isRTL || isRTL) && isOn) {
       toValue = -this.dimensions.width + this.dimensions.translateX;
     } else {
       toValue = -1;
@@ -157,8 +156,8 @@ export default class ToggleSwitch extends React.Component {
     }).start();
 
     return (
-      <View style={styles.container} {...this.props}>
-        {label && labelPosition === 'left' ? (
+      <View style={[styles.container, containerStyle]} {...this.props}>
+        {label ? (
           <Text style={[styles.labelStyle, labelStyle]}>{label}</Text>
         ) : null}
         <TouchableOpacity
@@ -170,9 +169,6 @@ export default class ToggleSwitch extends React.Component {
             {icon}
           </Animated.View>
         </TouchableOpacity>
-        {label && labelPosition === 'right' ? (
-          <Text style={[styles.labelStyle, labelStyle]}>{label}</Text>
-        ) : null}
       </View>
     );
   }
